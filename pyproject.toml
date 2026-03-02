@@ -1,0 +1,10 @@
+[project]
+name = "cbu-coding"
+version = "0.1.0"
+description = "Fintech MVP for accounts, income, expenses, debts and analytics"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+]
