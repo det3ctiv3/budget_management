@@ -1,104 +1,136 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CBU Finance</title>
+    <title>NewEcon Finance Control Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Outfit:wght@500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-theme="dark">
+    <div class="aura aura-left"></div>
+    <div class="aura aura-right"></div>
+    <div class="noise"></div>
     <div class="app-shell">
-      <header class="hero">
+      <header class="hero panel reveal">
         <div class="hero-copy">
-          <h1>CBU Finance</h1>
-          <p>Personal finance dashboard with Apple-like clarity</p>
+          <p class="eyebrow"><span id="brandName">NewEcon</span> Financial OS</p>
+          <h1>Control Room</h1>
+          <p id="heroSubtitle" class="subtitle">Track cashflow, debt, and budget limits in one operational view.</p>
         </div>
-        <div class="api-box glass">
-          <label for="apiBaseUrl">API Endpoint</label>
-          <input id="apiBaseUrl" type="text" value="http://127.0.0.1:8000" />
+        <div class="hero-actions">
+          <div class="theme-switch" role="group" aria-label="Theme switch">
+            <button id="themeDarkBtn" class="ghost theme-btn active" type="button" aria-pressed="true">NewEcon Theme</button>
+            <button id="themeLightBtn" class="ghost theme-btn" type="button" aria-pressed="false">White Theme</button>
+          </div>
+          <div id="brandChip" class="brand-chip">Group: NewEcon</div>
+          <button id="settingsToggle" class="ghost" type="button" aria-controls="settingsPanel" aria-expanded="false">API Settings</button>
         </div>
       </header>
 
+      <section id="settingsPanel" class="panel settings reveal" hidden>
+        <label for="apiBaseUrl">API Base URL</label>
+        <div class="settings-row">
+          <input id="apiBaseUrl" type="text" value="http://127.0.0.1:8000" aria-label="API base URL" />
+          <button id="applyApiUrl" type="button">Apply</button>
+        </div>
+      </section>
+
+      <section class="kpi-grid reveal" aria-label="Overview metrics">
+        <article class="kpi panel"><p>Total Balance</p><h2 id="kpiBalance">0.00</h2></article>
+        <article class="kpi panel"><p>Month Income</p><h2 id="kpiIncome">0.00</h2></article>
+        <article class="kpi panel"><p>Month Expense</p><h2 id="kpiExpense">0.00</h2></article>
+        <article class="kpi panel"><p>Month Net</p><h2 id="kpiNet">0.00</h2></article>
+      </section>
+
       <main class="grid">
-        <section class="card span-2">
-          <div class="card-head">
-            <h2>Accounts</h2>
-            <span>Cards, bank accounts, cash</span>
+        <section class="panel span-2 reveal">
+          <div class="section-head">
+            <h3>Accounts</h3>
+            <span>Cards, bank accounts, and cash wallets</span>
           </div>
-          <form id="accountForm" class="form-grid">
-            <input name="name" placeholder="Name" required />
-            <select name="type">
-              <option value="CARD">CARD</option>
-              <option value="BANK_ACCOUNT">BANK_ACCOUNT</option>
-              <option value="CASH">CASH</option>
-            </select>
-            <input name="currency" maxlength="3" value="USD" placeholder="USD" required />
-            <input name="initial_balance" type="number" step="0.01" placeholder="Initial balance" required />
-            <button type="submit">Add Account</button>
+          <form id="accountForm" class="form-grid form-wide">
+            <label>Name<input name="name" required /></label>
+            <label>Type
+              <select name="type">
+                <option value="CARD">CARD</option>
+                <option value="BANK_ACCOUNT">BANK_ACCOUNT</option>
+                <option value="CASH">CASH</option>
+              </select>
+            </label>
+            <label>Currency<input name="currency" maxlength="3" value="USD" required /></label>
+            <label>Initial Balance<input name="initial_balance" type="number" step="0.01" required /></label>
+            <button type="submit">Create Account</button>
           </form>
-          <div id="accountsTable" class="surface"></div>
+          <div id="accountsTable" class="surface" aria-live="polite"></div>
         </section>
 
-        <section class="card">
-          <div class="card-head"><h2>Expense</h2><span>Auto balance decrease</span></div>
-          <form id="expenseForm" class="form-grid compact"></form>
+        <section class="panel reveal">
+          <div class="section-head"><h3>Add Expense</h3><span>Balance decreases</span></div>
+          <form id="expenseForm" class="form-grid"></form>
         </section>
 
-        <section class="card">
-          <div class="card-head"><h2>Income</h2><span>Auto balance increase</span></div>
-          <form id="incomeForm" class="form-grid compact"></form>
+        <section class="panel reveal">
+          <div class="section-head"><h3>Add Income</h3><span>Balance increases</span></div>
+          <form id="incomeForm" class="form-grid"></form>
         </section>
 
-        <section class="card">
-          <div class="card-head"><h2>Transfer</h2><span>Between accounts</span></div>
-          <form id="transferForm" class="form-grid compact"></form>
+        <section class="panel reveal">
+          <div class="section-head"><h3>Transfer</h3><span>Move funds between accounts</span></div>
+          <form id="transferForm" class="form-grid"></form>
         </section>
 
-        <section class="card">
-          <div class="card-head"><h2>Debts</h2><span>DEBT / RECEIVABLE</span></div>
-          <form id="debtForm" class="form-grid compact">
-            <select name="kind">
-              <option value="DEBT">DEBT</option>
-              <option value="RECEIVABLE">RECEIVABLE</option>
-            </select>
-            <input name="counterparty" placeholder="Counterparty" required />
-            <input name="amount" type="number" step="0.01" placeholder="Amount" required />
-            <input name="date" type="date" required />
-            <input name="note" placeholder="Note" />
-            <button type="submit">Add Debt</button>
+        <section class="panel reveal">
+          <div class="section-head"><h3>Debts</h3><span>Track receivables and liabilities</span></div>
+          <form id="debtForm" class="form-grid">
+            <label>Kind
+              <select name="kind">
+                <option value="DEBT">DEBT</option>
+                <option value="RECEIVABLE">RECEIVABLE</option>
+              </select>
+            </label>
+            <label>Counterparty<input name="counterparty" required /></label>
+            <label>Amount<input name="amount" type="number" step="0.01" required /></label>
+            <label>Date<input name="date" type="date" required /></label>
+            <label>Note<input name="note" /></label>
+            <button type="submit">Create Debt</button>
           </form>
-          <div id="debtsTable" class="surface"></div>
+          <div id="debtsTable" class="surface" aria-live="polite"></div>
         </section>
 
-        <section class="card span-2">
-          <div class="card-head"><h2>Budget & Analytics</h2><span>Plan vs actual</span></div>
-          <div class="analytics-top">
-            <form id="budgetForm" class="form-grid compact">
-              <input name="month" type="month" required />
-              <input name="income_target" type="number" step="0.01" placeholder="Income target" required />
+        <section class="panel span-2 reveal">
+          <div class="section-head"><h3>Budgets and Insights</h3><span>Monthly target and category control</span></div>
+          <div class="split">
+            <form id="budgetForm" class="form-grid">
+              <label>Month<input name="month" type="month" required /></label>
+              <label>Income Target<input name="income_target" type="number" step="0.01" required /></label>
               <button type="submit">Save Budget</button>
             </form>
-            <form id="categoryLimitForm" class="form-grid compact">
-              <input name="month" type="month" required />
-              <select name="category" id="categoryLimitCategory"></select>
-              <input name="limit" type="number" step="0.01" placeholder="Category limit" required />
+            <form id="categoryLimitForm" class="form-grid">
+              <label>Month<input name="month" type="month" required /></label>
+              <label>Category<select name="category" id="categoryLimitCategory"></select></label>
+              <label>Limit<input name="limit" type="number" step="0.01" required /></label>
               <button type="submit">Save Limit</button>
             </form>
           </div>
-          <div class="kpi-grid">
-            <article class="kpi"><h3>Summary</h3><div id="summaryBox" class="info"></div></article>
-            <article class="kpi"><h3>By Category</h3><div id="categoryBox" class="info"></div></article>
-            <article class="kpi"><h3>Budget Compare</h3><div id="budgetBox" class="info"></div></article>
+          <div class="insight-grid">
+            <article class="surface"><h4>Summary</h4><div id="summaryBox" class="info"></div></article>
+            <article class="surface"><h4>By Category</h4><div id="categoryBox" class="info"></div></article>
+            <article class="surface"><h4>Budget Compare</h4><div id="budgetBox" class="info"></div></article>
           </div>
-          <button id="refreshAnalytics" class="ghost" type="button">Refresh Analytics</button>
+          <button id="refreshAnalytics" class="ghost" type="button">Refresh Insights</button>
         </section>
       </main>
 
-      <section class="card logs">
-        <div class="card-head"><h2>Activity Log</h2><span>Requests and responses</span></div>
+      <section class="panel reveal">
+        <div class="section-head"><h3>Activity Log</h3><span>Operational trace</span></div>
         <pre id="log"></pre>
       </section>
     </div>
-    <script src="app.js"></script>
+
+    <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
