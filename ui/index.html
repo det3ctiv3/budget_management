@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CBU Finance</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <h1>CBU Finance</h1>
+          <p>Personal finance dashboard with Apple-like clarity</p>
+        </div>
+        <div class="api-box glass">
+          <label for="apiBaseUrl">API Endpoint</label>
+          <input id="apiBaseUrl" type="text" value="http://127.0.0.1:8000" />
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="card span-2">
+          <div class="card-head">
+            <h2>Accounts</h2>
+            <span>Cards, bank accounts, cash</span>
+          </div>
+          <form id="accountForm" class="form-grid">
+            <input name="name" placeholder="Name" required />
+            <select name="type">
+              <option value="CARD">CARD</option>
+              <option value="BANK_ACCOUNT">BANK_ACCOUNT</option>
+              <option value="CASH">CASH</option>
+            </select>
+            <input name="currency" maxlength="3" value="USD" placeholder="USD" required />
+            <input name="initial_balance" type="number" step="0.01" placeholder="Initial balance" required />
+            <button type="submit">Add Account</button>
+          </form>
+          <div id="accountsTable" class="surface"></div>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><h2>Expense</h2><span>Auto balance decrease</span></div>
+          <form id="expenseForm" class="form-grid compact"></form>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><h2>Income</h2><span>Auto balance increase</span></div>
+          <form id="incomeForm" class="form-grid compact"></form>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><h2>Transfer</h2><span>Between accounts</span></div>
+          <form id="transferForm" class="form-grid compact"></form>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><h2>Debts</h2><span>DEBT / RECEIVABLE</span></div>
+          <form id="debtForm" class="form-grid compact">
+            <select name="kind">
+              <option value="DEBT">DEBT</option>
+              <option value="RECEIVABLE">RECEIVABLE</option>
+            </select>
+            <input name="counterparty" placeholder="Counterparty" required />
+            <input name="amount" type="number" step="0.01" placeholder="Amount" required />
+            <input name="date" type="date" required />
+            <input name="note" placeholder="Note" />
+            <button type="submit">Add Debt</button>
+          </form>
+          <div id="debtsTable" class="surface"></div>
+        </section>
+
+        <section class="card span-2">
+          <div class="card-head"><h2>Budget & Analytics</h2><span>Plan vs actual</span></div>
+          <div class="analytics-top">
+            <form id="budgetForm" class="form-grid compact">
+              <input name="month" type="month" required />
+              <input name="income_target" type="number" step="0.01" placeholder="Income target" required />
+              <button type="submit">Save Budget</button>
+            </form>
+            <form id="categoryLimitForm" class="form-grid compact">
+              <input name="month" type="month" required />
+              <select name="category" id="categoryLimitCategory"></select>
+              <input name="limit" type="number" step="0.01" placeholder="Category limit" required />
+              <button type="submit">Save Limit</button>
+            </form>
+          </div>
+          <div class="kpi-grid">
+            <article class="kpi"><h3>Summary</h3><div id="summaryBox" class="info"></div></article>
+            <article class="kpi"><h3>By Category</h3><div id="categoryBox" class="info"></div></article>
+            <article class="kpi"><h3>Budget Compare</h3><div id="budgetBox" class="info"></div></article>
+          </div>
+          <button id="refreshAnalytics" class="ghost" type="button">Refresh Analytics</button>
+        </section>
+      </main>
+
+      <section class="card logs">
+        <div class="card-head"><h2>Activity Log</h2><span>Requests and responses</span></div>
+        <pre id="log"></pre>
+      </section>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
